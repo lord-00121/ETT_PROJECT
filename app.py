@@ -2,6 +2,7 @@
 import tempfile
 import os
 from PyPDF2 import PdfReader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 @st.cache_resource
 def load_llm():
@@ -31,7 +32,13 @@ def process_document(file):
         st.error("Document format not supported!")
         return None
     
-    return text
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len
+    )
+    chunks = text_splitter.split_text(text)
+    return chunks
 
 def main():
     st.set_page_config(page_title="AI Document QA System", layout="wide")
@@ -44,11 +51,11 @@ def main():
         
         if uploaded_file is not None:
             if st.button("Process Document"):
-                with st.spinner("Extracting text..."):
-                    text = process_document(uploaded_file)
-                    if text:
-                        st.session_state.processed_text = text
-                        st.success("Document processed successfully!")
+                with st.spinner("Extracting text and creating chunks..."):
+                    chunks = process_document(uploaded_file)
+                    if chunks:
+                        st.session_state.chunks = chunks
+                        st.success(f"Document processed successfully! Created {len(chunks)} chunks.")
 
 if __name__ == "__main__":
     main()
