@@ -3,6 +3,8 @@ import tempfile
 import os
 from PyPDF2 import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 
 @st.cache_resource
 def load_llm():
@@ -10,7 +12,7 @@ def load_llm():
 
 @st.cache_resource
 def load_embeddings():
-    return None
+    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 def extract_text_from_pdf(pdf_file):
     pdf_reader = PdfReader(pdf_file)
@@ -45,17 +47,22 @@ def main():
     st.title("ðŸ“„ AI Question Answering System")
     st.markdown("Upload a PDF or Text document, and ask questions about its content!")
 
+    if "vector_store" not in st.session_state:
+        st.session_state.vector_store = None
+
     with st.sidebar:
         st.header("1. Upload Document")
         uploaded_file = st.file_uploader("Upload a PDF or TXT file", type=["pdf", "txt"])
         
         if uploaded_file is not None:
             if st.button("Process Document"):
-                with st.spinner("Extracting text and creating chunks..."):
+                with st.spinner("Extracting text and creating embeddings..."):
                     chunks = process_document(uploaded_file)
                     if chunks:
-                        st.session_state.chunks = chunks
-                        st.success(f"Document processed successfully! Created {len(chunks)} chunks.")
+                        embeddings = load_embeddings()
+                        vector_store = FAISS.from_texts(chunks, embeddings)
+                        st.session_state.vector_store = vector_store
+                        st.success("Document processed with embeddings!")
 
 if __name__ == "__main__":
     main()
