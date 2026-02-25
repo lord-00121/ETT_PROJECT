@@ -56,13 +56,13 @@ def main():
         
         if uploaded_file is not None:
             if st.button("Process Document"):
-                with st.spinner("Extracting text and creating embeddings..."):
+                with st.spinner("Creating FAISS vector store..."):
                     chunks = process_document(uploaded_file)
                     if chunks:
                         embeddings = load_embeddings()
                         vector_store = FAISS.from_texts(chunks, embeddings)
                         st.session_state.vector_store = vector_store
-                        st.success("Document processed with embeddings!")
+                        st.success("FAISS vector store created successfully!")
 
 if __name__ == "__main__":
     main()
