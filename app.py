@@ -5,10 +5,20 @@ from PyPDF2 import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
+from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
+from transformers import pipeline
 
 @st.cache_resource
 def load_llm():
-    return None
+    pipe = pipeline(
+        "text2text-generation",
+        model="google/flan-t5-base",
+        max_length=512,
+        temperature=0.1,
+        truncation=True
+    )
+    llm = HuggingFacePipeline(pipeline=pipe)
+    return llm
 
 @st.cache_resource
 def load_embeddings():
@@ -56,13 +66,13 @@ def main():
         
         if uploaded_file is not None:
             if st.button("Process Document"):
-                with st.spinner("Creating FAISS vector store..."):
+                with st.spinner("Processing with LLM..."):
                     chunks = process_document(uploaded_file)
                     if chunks:
                         embeddings = load_embeddings()
                         vector_store = FAISS.from_texts(chunks, embeddings)
                         st.session_state.vector_store = vector_store
-                        st.success("FAISS vector store created successfully!")
+                        st.success("LLM integration ready!")
 
 if __name__ == "__main__":
     main()
