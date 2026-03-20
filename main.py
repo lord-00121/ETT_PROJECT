@@ -2,6 +2,9 @@
 from pydantic import BaseModel
 import tempfile
 import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from PyPDF2 import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -9,6 +12,14 @@ from langchain_community.vectorstores import FAISS
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 app = FastAPI()
+
+# Enable CORS for frontend interactions
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Global variables for single-user state
 vector_store = None
@@ -95,6 +106,9 @@ async def ask_question(req: QuestionRequest):
         "sources": sources
     }
 
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 @app.get("/")
 async def root():
-    return {"message": "ETT Project API"}
+    return FileResponse("static/index.html")
