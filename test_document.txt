@@ -1,0 +1,5 @@
+Machine learning is a subset of AI where models learn patterns from data. In contrast, traditional programming involves writing explicit rules.
+
+The history of machine learning can be traced back to the 1950s when Arthur Samuel wrote the first computer learning program.
+
+Antigravity is a powerful AI coding assistant used by developers to write and test code autonomously. It runs in the terminal and has access to a variety of tools.
