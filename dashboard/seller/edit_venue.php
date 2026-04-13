@@ -1,0 +1,143 @@
+<?php
+// dashboard/seller/edit_venue.php
+require_once __DIR__ . '/../../config/auth.php';
+require_once __DIR__ . '/../../models/Venue.php';
+require_once __DIR__ . '/../../includes/layout.php';
+requireLogin('seller');
+
+$user = currentUser();
+$venueModel = new Venue();
+$id = (int)($_GET['id'] ?? 0);
+$venue = $venueModel->getById($id);
+
+if (!$venue || $venue['seller_id'] != $user['id']) {
+    header('Location: ' . BASE_URL . '/dashboard/seller/venues.php');
+    exit;
+}
+
+$existingPhotos = $venueModel->getPhotos($id);
+$error = '';
+$sports = ['Cricket','Football','Badminton','Basketball','Tennis','Swimming','Others'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verifyCsrf();
+    $data = [
+        'name' => trim($_POST['name'] ?? ''),
+        'sport_type' => $_POST['sport_type'] ?? '',
+        'location' => trim($_POST['location'] ?? ''),
+        'description' => trim($_POST['description'] ?? ''),
+        'price_per_slot' => (float)($_POST['price_per_slot'] ?? 0),
+        'slot_duration' => '01:00:00', // Defaulted to 1 hour
+        'operating_hours_start' => $_POST['operating_hours_start'] ?? '06:00',
+        'operating_hours_end' => $_POST['operating_hours_end'] ?? '22:00',
+    ];
+
+    if (!$data['name'] || !$data['sport_type'] || !$data['location'] || $data['price_per_slot'] == 0) {
+        $error = 'Please fill all required fields.';
+    } else {
+        $venueModel->update($id, $data, $user['id']);
+
+        // Handle new photos
+        if (!empty($_FILES['photos']['name'][0])) {
+            $uploadDir = __DIR__ . '/../../assets/uploads/venues/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+            if (!empty($_POST['replace_photos'])) $venueModel->deletePhotos($id);
+            $order = count($existingPhotos);
+            $files = $_FILES['photos'];
+            for ($i = 0; $i < min(count($files['name']), 10); $i++) {
+                if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
+                $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
+                if (!in_array($ext, ['jpg','jpeg','png'])) continue;
+                if ($files['size'][$i] > 5 * 1024 * 1024) continue;
+                $fname = 'venue_' . $id . '_' . time() . '_' . $i . '.' . $ext;
+                move_uploaded_file($files['tmp_name'][$i], $uploadDir . $fname);
+                $venueModel->addPhoto($id, 'assets/uploads/venues/' . $fname, $order++);
+            }
+        }
+        header('Location: ' . BASE_URL . '/dashboard/seller/venues.php?msg=saved');
+        exit;
+    }
+}
+
+layoutHead('Edit Venue');
+layoutNavbar('seller', $user['name']);
+layoutSidebar('seller', 'My Venues');
+?>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="fw-700 m-0">Edit Venue</h4>
+    <p class="text-muted small"><?php echo h($venue['name']); ?></p>
+  </div>
+  <a href="<?php echo BASE_URL; ?>/dashboard/seller/venues.php" class="btn btn-light shadow-0">← Back</a>
+</div>
+
+<?php if ($error): ?><div class="alert alert-danger py-2 small fw-600"><span class="material-icons align-middle fs-6 me-1">error</span> <?php echo h($error); ?></div><?php endif; ?>
+
+<div class="card p-4">
+  <form method="POST" enctype="multipart/form-data">
+    <?php echo csrfInput(); ?>
+    <div class="row g-3">
+      <div class="col-md-8">
+        <label class="form-label fw-600 small">Venue Name *</label>
+        <input type="text" name="name" class="form-control" value="<?php echo h($venue['name']); ?>" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-600 small">Sport Type *</label>
+        <select name="sport_type" class="form-select bg-light" required>
+          <?php foreach ($sports as $s): ?>
+          <option value="<?php echo h($s); ?>" <?php echo $venue['sport_type'] === $s ? 'selected' : ''; ?>><?php echo h($s); ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div class="col-md-8">
+        <label class="form-label fw-600 small">Location *</label>
+        <input type="text" name="location" class="form-control" value="<?php echo h($venue['location']); ?>" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-600 small">Price per Slot (₹) *</label>
+        <input type="number" name="price_per_slot" class="form-control" value="<?php echo h($venue['price_per_slot']); ?>" min="1" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-600 small">Operating Start</label>
+        <input type="time" name="operating_hours_start" class="form-control" value="<?php echo h(substr($venue['operating_hours_start'], 0, 5)); ?>">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-600 small">Operating End</label>
+        <input type="time" name="operating_hours_end" class="form-control" value="<?php echo h(substr($venue['operating_hours_end'], 0, 5)); ?>">
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-600 small">Description</label>
+        <textarea name="description" class="form-control bg-light" rows="4"><?php echo h($venue['description']); ?></textarea>
+      </div>
+
+      <!-- Existing Photos -->
+      <?php if (!empty($existingPhotos)): ?>
+      <div class="col-12 border-top pt-3 mt-3">
+        <label class="form-label fw-600 small">Current Photos</label>
+        <div class="d-flex flex-wrap gap-2">
+          <?php foreach ($existingPhotos as $p): ?>
+            <img src="<?php echo BASE_URL . '/' . h($p['photo_url']); ?>" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;" alt="Venue photo">
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <?php endif; ?>
+
+      <div class="col-12">
+        <label class="form-label fw-600 small">Add New Photos (optional, max 5 MB each) <span class="text-muted fw-normal">(Hold Ctrl/Cmd to select multiple files)</span></label>
+        <input type="file" name="photos[]" class="form-control" multiple="multiple" accept=".jpg,.jpeg,.png">
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="checkbox" name="replace_photos" id="replacePhotos">
+          <label class="form-check-label small" for="replacePhotos">Replace all existing photos instead of adding to them</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="d-flex gap-3 mt-4 pt-3 border-top">
+      <button type="submit" class="btn btn-primary px-4 fw-600 shadow-0"><span class="material-icons align-middle fs-6 me-1">save</span> Update Venue</button>
+      <a href="<?php echo BASE_URL; ?>/dashboard/seller/venues.php" class="btn btn-light shadow-0 fw-600">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<?php layoutFooter(); ?>

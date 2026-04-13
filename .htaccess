@@ -1,0 +1,42 @@
+# Apache .htaccess — Sportify Security
+
+# Prevent directory listing
+Options -Indexes
+
+# Block direct access to config and models
+<FilesMatch "\.(php)$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block direct access to config dir
+  RewriteRule ^config/ - [F,L]
+
+  # Block direct access to models dir
+  RewriteRule ^models/ - [F,L]
+
+  # Block direct access to includes dir
+  RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# Secure uploaded files — prevent PHP execution in uploads
+<IfModule mod_rewrite.c>
+  RewriteRule ^assets/uploads/.*\.(php|phtml|php3|php4|php5|phps)$ - [F,NC,L]
+</IfModule>
+
+# Set security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Prevent access to hidden files (.git, .env, etc.)
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>

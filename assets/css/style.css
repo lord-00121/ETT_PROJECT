@@ -1,0 +1,402 @@
+/* =============================================================
+   SPORTIFY — Global Stylesheet
+   Primary: #1A6B3C  |  Accent: #F5A623  |  Font: Poppins
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+  --primary:        #1A6B3C;
+  --primary-dark:   #134d2b;
+  --primary-light:  #2a8c50;
+  --accent:         #F5A623;
+  --accent-dark:    #d4871a;
+  --bg:             #F8F9FA;
+  --white:          #ffffff;
+  --text:           #212529;
+  --text-muted:     #6c757d;
+  --border:         #dee2e6;
+  --success:        #198754;
+  --danger:         #dc3545;
+  --warning:        #ffc107;
+  --info:           #0dcaf0;
+  --card-radius:    8px;
+  --input-radius:   4px;
+  --shadow-sm:      0 2px 8px rgba(0,0,0,.08);
+  --shadow-md:      0 4px 20px rgba(0,0,0,.12);
+  --shadow-lg:      0 8px 40px rgba(0,0,0,.18);
+  --transition:     all .25s ease;
+}
+
+/* ---------- Reset / Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--primary); text-decoration: none; transition: var(--transition); }
+a:hover { color: var(--primary-dark); }
+
+img { max-width: 100%; height: auto; }
+
+/* ---------- Typography ---------- */
+h1,h2,h3,h4,h5,h6 { font-weight: 600; line-height: 1.3; }
+.text-primary-custom { color: var(--primary) !important; }
+.text-accent { color: var(--accent) !important; }
+.fw-300 { font-weight: 300; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+
+/* ---------- Buttons ---------- */
+.btn-sportify {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: var(--input-radius);
+  padding: .55rem 1.4rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.btn-sportify:hover { background: var(--primary-dark); color: var(--white); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  border-radius: var(--input-radius);
+  padding: .55rem 1.4rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-accent:hover { background: var(--accent-dark); color: var(--white); transform: translateY(-1px); }
+
+.btn-outline-sportify {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: var(--input-radius);
+  padding: .5rem 1.3rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-outline-sportify:hover { background: var(--primary); color: var(--white); }
+
+/* ---------- Cards ---------- */
+.card-sportify {
+  background: var(--white);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,.06);
+  transition: var(--transition);
+  overflow: hidden;
+}
+.card-sportify:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+
+.card-venue-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body-pad { padding: 1.2rem; }
+
+/* ---------- Navbar ---------- */
+.navbar-sportify {
+  background: var(--primary);
+  box-shadow: var(--shadow-md);
+  padding: .75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+.navbar-sportify .navbar-brand {
+  color: var(--white) !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.navbar-sportify .navbar-brand span { color: var(--accent); }
+.navbar-sportify .nav-link { color: rgba(255,255,255,.85) !important; font-weight: 500; padding: .4rem .8rem !important; border-radius: 4px; transition: var(--transition); }
+.navbar-sportify .nav-link:hover, .navbar-sportify .nav-link.active { color: var(--white) !important; background: rgba(255,255,255,.15); }
+.navbar-sportify .btn-nav-accent { background: var(--accent); color: var(--white) !important; font-weight: 600; border-radius: 4px; }
+.navbar-sportify .btn-nav-accent:hover { background: var(--accent-dark); }
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 240px;
+  min-height: calc(100vh - 60px);
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem .8rem;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  overflow-y: auto;
+  transition: var(--transition);
+  z-index: 100;
+}
+.sidebar .nav-section-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  padding: 1rem .8rem .3rem;
+}
+.sidebar .nav-item a {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .65rem 1rem;
+  border-radius: 6px;
+  color: var(--text);
+  font-weight: 500;
+  font-size: .88rem;
+  transition: var(--transition);
+}
+.sidebar .nav-item a:hover, .sidebar .nav-item a.active {
+  background: linear-gradient(135deg, rgba(26,107,60,.12), rgba(26,107,60,.06));
+  color: var(--primary);
+}
+.sidebar .nav-item a.active { font-weight: 600; }
+.sidebar .nav-item a .material-icons { font-size: 1.1rem; }
+
+.main-content {
+  margin-left: 240px;
+  padding: 2rem;
+  min-height: calc(100vh - 60px);
+}
+
+/* ---------- Login Page ---------- */
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d3d22 0%, #1A6B3C 50%, #2a8c50 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.login-card {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 460px;
+}
+.login-logo { font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: .2rem; }
+.login-logo span { color: var(--accent); }
+.login-subtitle { color: var(--text-muted); margin-bottom: 1.8rem; font-size: .9rem; }
+.role-tab { border: 2px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; margin-bottom: 1.5rem; }
+.role-tab input[type=radio] { display: none; }
+.role-tab label { flex: 1; text-align: center; padding: .6rem; cursor: pointer; font-weight: 500; font-size: .85rem; transition: var(--transition); color: var(--text-muted); }
+.role-tab input[type=radio]:checked + label { background: var(--primary); color: var(--white); }
+
+/* ---------- Stat Cards ---------- */
+.stat-card {
+  background: var(--white);
+  border-radius: var(--card-radius);
+  padding: 1.4rem;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--primary);
+  transition: var(--transition);
+}
+.stat-card:hover { box-shadow: var(--shadow-md); }
+.stat-card.accent { border-left-color: var(--accent); }
+.stat-card.info { border-left-color: var(--info); }
+.stat-card.success { border-left-color: var(--success); }
+.stat-card .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+.stat-card .stat-icon.green { background: rgba(26,107,60,.12); color: var(--primary); }
+.stat-card .stat-icon.amber { background: rgba(245,166,35,.15); color: var(--accent-dark); }
+.stat-card .stat-icon.blue { background: rgba(13,202,240,.12); color: #0dcaf0; }
+.stat-card .stat-label { font-size: .78rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+.stat-card .stat-value { font-size: 1.6rem; font-weight: 700; color: var(--text); line-height: 1.2; }
+
+/* ---------- Sport Badges ---------- */
+.badge-sport {
+  display: inline-block;
+  padding: .25rem .7rem;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+.badge-cricket   { background: #e8f5e9; color: #2e7d32; }
+.badge-football  { background: #e3f2fd; color: #1565c0; }
+.badge-badminton { background: #fce4ec; color: #c62828; }
+.badge-basketball{ background: #fff3e0; color: #e65100; }
+.badge-tennis    { background: #f3e5f5; color: #6a1b9a; }
+.badge-swimming  { background: #e0f7fa; color: #006064; }
+.badge-others    { background: #f5f5f5; color: #424242; }
+
+/* ---------- Star Rating ---------- */
+.stars { color: #ffc107; font-size: 1rem; letter-spacing: 1px; }
+.stars .empty { color: #dee2e6; }
+
+/* ---------- Slot Chips ---------- */
+.slot-chip {
+  display: inline-block;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  padding: .4rem .85rem;
+  font-size: .82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+  margin: .25rem;
+}
+.slot-chip:hover:not(.booked) { border-color: var(--primary); color: var(--primary); background: rgba(26,107,60,.06); }
+.slot-chip.selected { border-color: var(--primary); background: var(--primary); color: var(--white); }
+.slot-chip.booked { background: var(--bg); color: var(--text-muted); cursor: not-allowed; opacity: .6; }
+
+/* ---------- Tables ---------- */
+.table-sportify { border-radius: var(--card-radius); overflow: hidden; }
+.table-sportify thead { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); }
+.table-sportify thead th { color: var(--white); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .5px; border: none; padding: .9rem 1rem; }
+.table-sportify tbody tr { transition: var(--transition); }
+.table-sportify tbody tr:hover { background: rgba(26,107,60,.04); }
+
+/* ---------- Section Headers ---------- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.section-title { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+.section-subtitle { font-size: .85rem; color: var(--text-muted); margin-top: .15rem; }
+
+/* ---------- Search bar ---------- */
+.search-wrap { position: relative; }
+.search-wrap input { padding-left: 2.8rem; border-radius: 8px; border: 2px solid var(--border); transition: var(--transition); font-family: 'Poppins',sans-serif; }
+.search-wrap input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,60,.12); outline: none; }
+.search-wrap .search-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+
+/* ---------- Photo Upload Preview ---------- */
+.photo-preview-grid { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.photo-preview-item { width: 90px; height: 90px; border-radius: 6px; overflow: hidden; position: relative; border: 2px solid var(--border); }
+.photo-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.photo-preview-item .remove-photo { position: absolute; top: 2px; right: 2px; background: rgba(220,53,69,.9); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: .7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+/* ---------- Venue Detail ---------- */
+.venue-carousel-img { width: 100%; height: 380px; object-fit: cover; border-radius: var(--card-radius); }
+.booking-sidebar { background: var(--white); border-radius: var(--card-radius); box-shadow: var(--shadow-md); padding: 1.5rem; position: sticky; top: 80px; }
+.booking-summary-row { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
+.booking-summary-row:last-child { border-bottom: none; }
+.price-tag { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+
+/* ---------- Confirmation Page ---------- */
+.confirm-card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow-lg); padding: 3rem; max-width: 580px; margin: 2rem auto; text-align: center; }
+.confirm-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #1A6B3C, #2a8c50); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+.confirm-icon .material-icons { font-size: 2.5rem; color: white; }
+.confirm-ref { display: inline-block; background: rgba(26,107,60,.1); color: var(--primary); font-weight: 700; border-radius: 6px; padding: .3rem .9rem; font-size: .9rem; margin: .5rem 0 1rem; }
+
+/* ---------- Revenue Chart ---------- */
+.chart-wrap { background: var(--white); border-radius: var(--card-radius); box-shadow: var(--shadow-sm); padding: 1.5rem; }
+.chart-wrap canvas { max-height: 280px; }
+
+/* ---------- Toggle Switch ---------- */
+.toggle-switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; border-radius: 24px; transition: .3s; }
+.slider::before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+.toggle-switch input:checked + .slider { background: var(--primary); }
+.toggle-switch input:checked + .slider::before { transform: translateX(22px); }
+
+/* ---------- Alerts ---------- */
+.alert-sportify { border-radius: var(--card-radius); border: none; padding: .85rem 1.2rem; font-weight: 500; font-size: .88rem; display: flex; align-items: center; gap: .5rem; }
+.alert-success-custom { background: rgba(25,135,84,.1); color: #0f5132; border-left: 4px solid var(--success); }
+.alert-danger-custom { background: rgba(220,53,69,.1); color: #842029; border-left: 4px solid var(--danger); }
+
+/* ---------- Profile Form ---------- */
+.profile-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); }
+.profile-avatar-placeholder { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; }
+.profile-avatar-placeholder .material-icons { font-size: 2.5rem; color: white; }
+
+/* ---------- Empty State ---------- */
+.empty-state { text-align: center; padding: 4rem 2rem; }
+.empty-state .material-icons { font-size: 4rem; color: var(--border); display: block; margin-bottom: 1rem; }
+.empty-state p { color: var(--text-muted); font-size: .95rem; }
+
+/* ---------- Page Header ---------- */
+.page-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 2rem; border-radius: var(--card-radius); margin-bottom: 2rem; }
+.page-header h1 { color: white; font-size: 1.6rem; margin: 0; }
+.page-header p { color: rgba(255,255,255,.8); margin: .3rem 0 0; font-size: .88rem; }
+
+/* ---------- Fully Booked Badge ---------- */
+.fully-booked-badge { background: #6c757d; color: white; border-radius: var(--input-radius); padding: .45rem 1rem; font-size: .82rem; font-weight: 600; display: inline-block; }
+
+/* ---------- Filter Sidebar ---------- */
+.filter-panel { background: var(--white); border-radius: var(--card-radius); box-shadow: var(--shadow-sm); padding: 1.2rem; }
+.filter-panel .filter-title { font-weight: 700; font-size: .88rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); margin-bottom: .6rem; }
+
+/* ---------- Rating Stars Input ---------- */
+.star-rating { display: flex; flex-direction: row-reverse; gap: .25rem; }
+.star-rating input { display: none; }
+.star-rating label { font-size: 1.6rem; cursor: pointer; color: var(--border); transition: var(--transition); }
+.star-rating label:hover, .star-rating label:hover ~ label,
+.star-rating input:checked ~ label { color: #ffc107; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991.98px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 1rem; }
+  .venue-carousel-img { height: 240px; }
+}
+@media (max-width: 767.98px) {
+  .login-card { padding: 1.8rem 1.4rem; }
+  .confirm-card { padding: 2rem 1.2rem; }
+  .stat-card .stat-value { font-size: 1.3rem; }
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in-up { animation: fadeInUp .4s ease both; }
+
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.pulse { animation: pulse 2s infinite; }
+
+/* ---------- Price Range Slider ---------- */
+.price-range input[type=range] { -webkit-appearance: none; width: 100%; height: 4px; background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, var(--border) 50%); border-radius: 2px; outline: none; }
+.price-range input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--primary); border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: var(--shadow-sm); }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ---------- Admin badge colours ---------- */
+.badge-active   { background: rgba(25,135,84,.15); color: #0f5132; }
+.badge-suspended{ background: rgba(220,53,69,.15); color: #842029; }
+.badge-confirmed{ background: rgba(26,107,60,.15); color: #134d2b; }
+.badge-dismissed{ background: rgba(108,117,125,.15); color: #495057; }
+
+/* Utility */
+.gap-sm { gap: .5rem; }
+.cursor-pointer { cursor: pointer; }
+.border-radius-8 { border-radius: 8px; }
+.object-cover { object-fit: cover; }
